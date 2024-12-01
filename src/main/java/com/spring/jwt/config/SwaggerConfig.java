@@ -1,5 +1,4 @@
 package com.spring.jwt.config;
-
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -14,11 +13,11 @@ public class SwaggerConfig {
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
                 .info(new Info().title("color  API")
-                        .description("employee application")
+                        .description("color application")
                         .version("v0.0.1")
-                        .license(new License().name("Apache 2.0").url("https://employee.com/")))
+                        .license(new License().name("Apache 2.0").url("https://color.com/")))
                 .externalDocs(new ExternalDocumentation()
-                        .description("employee application")
-                        .url("https://employee.com/"));
+                        .description("color application")
+                        .url("https://color.com/"));
     }
 }
