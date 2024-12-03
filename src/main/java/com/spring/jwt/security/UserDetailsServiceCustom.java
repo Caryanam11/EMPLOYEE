@@ -63,11 +63,13 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 
             userId = String.valueOf(user.getId());
         }
+        Integer getReferenceId =  user.getReferenceId();
 
         return new UserDetailsCustom(
                 user.getEmail(),
                 user.getPassword(),
                 name,
+                getReferenceId,
                 userId,
                 authorities
         );

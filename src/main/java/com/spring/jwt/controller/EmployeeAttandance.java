@@ -34,7 +34,7 @@ public class EmployeeAttandance {
                     .body(new BaseResponseDTO("Unsuccessful", e.getMessage()));
         }
     }
-    @GetMapping("/attendance/{employeeId}")
+    @GetMapping("/attendance/{employeeId}/{referenceId}")
     public ResponseEntity<?> getAttendanceByEmployeeId(@PathVariable Integer employeeId,@PathVariable Integer referenceId) {
         try {
             List<EmployeeAttendance> attendances = attendanceService.getAttendanceByEmployeeId(employeeId,referenceId);
@@ -47,7 +47,7 @@ public class EmployeeAttandance {
                     .body(new BaseResponseDTO("Unsuccessful", e.getMessage()));
         }
     }
-    @GetMapping("/attendance/{employeeId}/{date}")
+    @GetMapping("/attendance/{employeeId}/{date}/{referenceId}")
     public ResponseEntity<?> getAttendanceByEmployeeIdAndDate(
             @PathVariable Integer employeeId,
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
@@ -81,7 +81,7 @@ public class EmployeeAttandance {
         }
     }
 
-    @PatchMapping("/attendance/{employeeId}/{date}")
+    @PatchMapping("/attendance/{employeeId}/{date}/{status}/{referenceId}")
     public ResponseEntity<?> updateAttendanceStatusByEmployeeId(
             @PathVariable Integer employeeId,
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,

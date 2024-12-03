@@ -27,10 +27,33 @@ public class EmployeeSalaryCalulateController {
             Object response= employeeSalaryService.getSalaryBreakDown(EmployeeId,referenceId,month);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponceDto("Successful",response));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponseDTO("Unsuccessful","User already exists"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponseDTO("Unsuccessful",e.getMessage()));
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponseDTO("Unsuccessful","Invalid role"));
         }
     }
+    @GetMapping("/getSalaryPaidOrUnPaid")
+    public ResponseEntity<?> getSalaryPaidOrUnPaid(@RequestParam Integer EmployeeId ,@RequestParam Integer referenceId ,@RequestParam Integer month) {
 
+        try {
+            Object response = employeeSalaryService.gateSalaryPaidOrUnpaid(EmployeeId, referenceId, month);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponceDto("Successful", response));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponseDTO("Unsuccessful", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponseDTO("Unsuccessful", "Invalid role"));
+        }
+    }
+    @PostMapping("/saveSalaryPaidOrUnPaid")
+    public ResponseEntity<?> saveSalaryPaidOrUnPaid(@RequestParam Integer EmployeeId ,@RequestParam Integer referenceId ,@RequestParam Integer month) {
+
+        try {
+            Object response = employeeSalaryService.updatedSalaryPaidOrUnpaid(EmployeeId, referenceId, month);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponceDto("Successful", response));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponseDTO("Unsuccessful", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponseDTO("Unsuccessful", "Invalid role"));
+        }
+    }
 }

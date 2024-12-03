@@ -24,7 +24,7 @@ public interface EmployeeAttendanceRepository extends JpaRepository<EmployeeAtte
     @Query("DELETE FROM EmployeeAttendance ea WHERE ea.employeeId = :employeeId AND ea.date = :date AND ea.referenceId = :referenceId")
     void deleteByEmployeeIdAndDate(@Param("employeeId") Integer employeeId, @Param("date") LocalDate date, @Param("referenceId") Integer referenceId);
 
-    @Query("SELECT ea FROM EmployeeAttendance ea WHERE ea.employeeId = :employeeId AND ea.referenceId = :referenceId AND ea.month = :month")
+    @Query("SELECT ea FROM EmployeeAttendance ea WHERE ea.employeeId = :employeeId AND ea.referenceId = :referenceId AND MONTH(ea.date) = :month")
     List<EmployeeAttendance> findByERMId(@Param("employeeId") Integer employeeId, @Param("referenceId") Integer referenceId, @Param("month") Integer month);
 
 

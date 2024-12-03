@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 @NoArgsConstructor
-@AllArgsConstructor
+
 public class UserDetailsCustom implements UserDetails {
 
     private String username;
@@ -20,18 +20,29 @@ public class UserDetailsCustom implements UserDetails {
 
 
 
+    private Integer  referenceId;
     private String userId;
 
-
-
+    public UserDetailsCustom(String username, String password, String name, Integer referenceId, String userId, List<GrantedAuthority> authorities) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.referenceId = referenceId;
+        this.userId = userId;
+        this.authorities = authorities;
+    }
 
     public String getUserId() {
         return userId;
     }
 
+    public Integer getReferenceId() {
+        return referenceId;
+    }
 
-
-
+    public void setReferenceId(Integer referenceId) {
+        this.referenceId = referenceId;
+    }
 
     public String getName() {
         return name;

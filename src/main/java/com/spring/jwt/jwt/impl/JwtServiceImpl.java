@@ -64,7 +64,7 @@ public class JwtServiceImpl implements JwtService {
 
         log.info("Roles: {}", roles);
 
-        String dealerId = null;
+        String ReferenceID= null;
 
         String userId = null;
 
@@ -77,6 +77,7 @@ public class JwtServiceImpl implements JwtService {
             if (roles.contains("USER")) {
             userId = userDetailsCustom.getUserId();
 
+
         }
 
 
@@ -86,6 +87,7 @@ public class JwtServiceImpl implements JwtService {
                 .claim("userId", userId)
                 .claim("authorities", userDetailsCustom.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .claim("roles", roles)
+                .claim("ReferenceId", userDetailsCustom.getReferenceId())
                 .claim("isEnable", userDetailsCustom.isEnabled())
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plusSeconds(jwtConfig.getExpiration())))
