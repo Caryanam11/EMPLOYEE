@@ -37,17 +37,19 @@ import java.util.Collections;
 
 public class AppConfig {
 
-    @Autowired
-    private CustomAuthenticationProvider customAuthenticationProvider;
+
+    private final CustomAuthenticationProvider customAuthenticationProvider;
+    private final JwtConfig jwtConfig;
+    private final JwtService jwtService;
 
     @Autowired
-    private JwtConfig jwtConfig;
-
-
-    @Autowired
-    @Lazy
-    private JwtService jwtService;
-
+    public AppConfig(CustomAuthenticationProvider customAuthenticationProvider,
+                     JwtConfig jwtConfig,
+                     @Lazy JwtService jwtService) {
+        this.customAuthenticationProvider = customAuthenticationProvider;
+        this.jwtConfig = jwtConfig;
+        this.jwtService = jwtService;
+    }
     @Bean
     public JwtConfig jwtConfig(){
         return new JwtConfig();
