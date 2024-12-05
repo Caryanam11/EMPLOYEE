@@ -13,11 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -33,23 +30,19 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
-
 public class AppConfig {
 
-
-    private final CustomAuthenticationProvider customAuthenticationProvider;
-    private final JwtConfig jwtConfig;
-    private final JwtService jwtService;
+    @Autowired
+    private CustomAuthenticationProvider customAuthenticationProvider;
 
     @Autowired
-    public AppConfig(CustomAuthenticationProvider customAuthenticationProvider,
-                     JwtConfig jwtConfig,
-                     @Lazy JwtService jwtService) {
-        this.customAuthenticationProvider = customAuthenticationProvider;
-        this.jwtConfig = jwtConfig;
-        this.jwtService = jwtService;
-    }
+    private JwtConfig jwtConfig;
+
+
+    @Autowired
+    @Lazy
+    private JwtService jwtService;
+
     @Bean
     public JwtConfig jwtConfig(){
         return new JwtConfig();
@@ -74,7 +67,6 @@ public class AppConfig {
     }
 
     @Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
 
