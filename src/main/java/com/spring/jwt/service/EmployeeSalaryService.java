@@ -66,18 +66,19 @@ public class EmployeeSalaryService {
 
         }
         Optional<SalaryPaidOrUnPaid> salaryPaidOrUnPaid = salaryPaidOrUnPaidRepo.findByMonthAndSalaryPaidOrUnPaidAndReferenceId(month,employeeId,referenceId);
-    Boolean salPaidOrNOt = false;
 
 
 
-    if (salaryPaidOrUnPaid.isPresent() ){
-        salPaidOrNOt = true;
-
-    }else if (!salPaidOrNOt){
+//    if (salaryPaidOrUnPaid.isPresent() ){
+//        salPaidOrNOt = true;
+//
+//    }else
+        System.out.println(salaryPaidOrUnPaid.isEmpty());
+        if (salaryPaidOrUnPaid.isEmpty()){
         SalaryPaidOrUnPaid salaryPaidOrUnPaid1 = new SalaryPaidOrUnPaid();
         salaryPaidOrUnPaid1.setEmployeeId(employeeId);
 
-        salaryPaidOrUnPaid1.setSalaryPaidOrUnPaid(salPaidOrNOt);
+        salaryPaidOrUnPaid1.setSalaryPaidOrUnPaid(false);
 
         salaryPaidOrUnPaid1.setReferenceId(referenceId);
         salaryPaidOrUnPaid1.setMonth(month);
@@ -93,7 +94,7 @@ public class EmployeeSalaryService {
 
           getFinalAmount =  advanceSalary.get().getAdvanceAmount();
         }
-        return new SalaryDto(employeeId,halfDaySalary,perDaySalary,totalSalary,totalSalaryAsterBreakdown,salaryBreakdownDtos,salPaidOrNOt,getFinalAmount);
+        return new SalaryDto(employeeId,halfDaySalary,perDaySalary,totalSalary,totalSalaryAsterBreakdown,salaryBreakdownDtos,salaryPaidOrUnPaid.get().getSalaryPaidOrUnPaid(),getFinalAmount);
 
     }
     public Object advanceAVB(Integer employeeId) {
@@ -152,13 +153,13 @@ public class EmployeeSalaryService {
     }
     public String updatedSalaryPaidStatus(Integer employeeId, Integer referenceId, Integer month) {
         SalaryPaidOrUnPaid salaryPaidOrUnPaid = salaryPaidOrUnPaidRepo.findByMonthAndSalaryPaidOrUnPaidAndReferenceId(month,employeeId,referenceId).orElseThrow(()->new RuntimeException("not found"));
-
+        System.out.println(salaryPaidOrUnPaid.toString());
         if (salaryPaidOrUnPaid.getSalaryPaidOrUnPaid()){
             salaryPaidOrUnPaid.setSalaryPaidOrUnPaid(false);
             salaryPaidOrUnPaidRepo.save(salaryPaidOrUnPaid);
         }
 
-        return "updated salary paid";
+        return "updated salary to Unpaid";
     }
 
     public String updatedSalaryPaidOrUnpaid(Integer employeeId, Integer referenceId, Integer month) {

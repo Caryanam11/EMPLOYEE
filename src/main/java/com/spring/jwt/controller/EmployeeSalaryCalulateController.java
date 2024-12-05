@@ -69,6 +69,19 @@ public class EmployeeSalaryCalulateController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponseDTO("Unsuccessful", "Invalid role"));
         }
     }
+    @PatchMapping("/updatedSalaryPaidStatus")
+    public ResponseEntity<?> updatedSalaryPaidStatus(@RequestParam Integer EmployeeId ,@RequestParam Integer referenceId ,@RequestParam Integer month) {
+
+
+        try {
+            Object response = employeeSalaryService.updatedSalaryPaidStatus(EmployeeId,referenceId,month);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponceDto("Successful", response));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponseDTO("Unsuccessful", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponseDTO("Unsuccessful", "Invalid role"));
+        }
+    }
     @GetMapping("/addAdvanceAVB")
     public ResponseEntity<?> addAdvanceAVB(@RequestParam Integer employeeId ,@RequestParam Integer amount ) {
 
