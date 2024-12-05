@@ -26,7 +26,7 @@ public class EmployeeAttendance {
 
 
     //PRESENT
-    //ANSENT
+    //APSENT
     //HALFDAY
     private String status;
 

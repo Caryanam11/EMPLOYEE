@@ -2,9 +2,11 @@ package com.spring.jwt.service;
 
 import com.spring.jwt.dto.SalaryBreakdownDto;
 import com.spring.jwt.dto.SalaryDto;
+import com.spring.jwt.entity.AdvanceSalary;
 import com.spring.jwt.entity.Employee;
 import com.spring.jwt.entity.EmployeeAttendance;
 import com.spring.jwt.entity.SalaryPaidOrUnPaid;
+import com.spring.jwt.repository.AdvanceSalaryRepo;
 import com.spring.jwt.repository.EmployeeAttendanceRepository;
 import com.spring.jwt.repository.EmployeeRepository;
 import com.spring.jwt.repository.SalaryPaidOrUnPaidRepo;
@@ -22,6 +24,12 @@ public class EmployeeSalaryService {
     private EmployeeRepository employeeRepository;
     @Autowired
     private SalaryPaidOrUnPaidRepo salaryPaidOrUnPaidRepo;
+
+    @Autowired
+    private AdvanceSalaryRepo advanceSalaryRepo;
+
+
+
     @Autowired
     private EmployeeAttendanceRepository attendanceRepository;
     public Object getSalaryBreakDown(Integer employeeId, Integer referenceId, Integer month) {
@@ -76,9 +84,83 @@ public class EmployeeSalaryService {
 
         salaryPaidOrUnPaidRepo.save(salaryPaidOrUnPaid1);
     }
-        return new SalaryDto(employeeId,halfDaySalary,perDaySalary,totalSalary,totalSalaryAsterBreakdown,salaryBreakdownDtos,salPaidOrNOt);
+        Optional<AdvanceSalary> advanceSalary = advanceSalaryRepo.findByEmployeeId(employeeId);
+        Integer getFinalAmount = 0;
+
+
+
+     if (advanceSalary.isPresent()){
+
+          getFinalAmount =  advanceSalary.get().getAdvanceAmount();
+        }
+        return new SalaryDto(employeeId,halfDaySalary,perDaySalary,totalSalary,totalSalaryAsterBreakdown,salaryBreakdownDtos,salPaidOrNOt,getFinalAmount);
 
     }
+    public Object advanceAVB(Integer employeeId) {
+        return advanceSalaryRepo.findByEmployeeId(employeeId).orElseThrow(()->new RuntimeException("employee id not found by id"));
+    }
+    public String addAdvanceAVB(Integer employeeId,Integer amount) {
+        Optional<AdvanceSalary> advanceSalary = advanceSalaryRepo.findByEmployeeId(employeeId);
+        if (advanceSalary.isEmpty()){
+            AdvanceSalary advanceSalary1 = new AdvanceSalary();
+            advanceSalary1.setAdvanceAmount(amount);
+            advanceSalary1.setAdvanceEmployeId(employeeId);
+            advanceSalaryRepo.save(advanceSalary1);
+        }else if (advanceSalary.isPresent()){
+            Integer getFinalAmount = advanceSalary.get().getAdvanceAmount();
+
+
+            advanceSalary.get().setAdvanceAmount(getFinalAmount+amount);
+            advanceSalaryRepo.save(advanceSalary.get());
+
+        }
+
+        return "Advance added";
+
+    }
+    public Object deleteAdvanceAVB(Integer employeeId,Integer amount) {
+        AdvanceSalary advanceSalary =  advanceSalaryRepo.findByEmployeeId(employeeId).orElseThrow(()->new RuntimeException("employee id not found by id"));
+
+            Integer getFinalAmount = advanceSalary.getAdvanceAmount();
+
+            if (advanceSalary.getAdvanceAmount() <= amount){
+                getFinalAmount = amount - getFinalAmount;
+
+
+                if (advanceSalary.getAdvanceAmount() < 0){
+                    getFinalAmount = -(getFinalAmount);
+
+                }
+
+            }
+
+            else if (advanceSalary.getAdvanceAmount() >= amount){
+                getFinalAmount = getFinalAmount-amount ;
+
+
+                if (advanceSalary.getAdvanceAmount() < 0){
+                    getFinalAmount = -(getFinalAmount);
+
+                }
+
+            }
+
+            advanceSalary.setAdvanceAmount(getFinalAmount);
+            advanceSalaryRepo.save(advanceSalary);
+
+        return "deleted salary paid";
+    }
+    public String updatedSalaryPaidStatus(Integer employeeId, Integer referenceId, Integer month) {
+        SalaryPaidOrUnPaid salaryPaidOrUnPaid = salaryPaidOrUnPaidRepo.findByMonthAndSalaryPaidOrUnPaidAndReferenceId(month,employeeId,referenceId).orElseThrow(()->new RuntimeException("not found"));
+
+        if (salaryPaidOrUnPaid.getSalaryPaidOrUnPaid()){
+            salaryPaidOrUnPaid.setSalaryPaidOrUnPaid(false);
+            salaryPaidOrUnPaidRepo.save(salaryPaidOrUnPaid);
+        }
+
+        return "updated salary paid";
+    }
+
     public String updatedSalaryPaidOrUnpaid(Integer employeeId, Integer referenceId, Integer month) {
         SalaryPaidOrUnPaid salaryPaidOrUnPaid = salaryPaidOrUnPaidRepo.findByMonthAndSalaryPaidOrUnPaidAndReferenceId(month,employeeId,referenceId).orElseThrow(()->new RuntimeException("invalid month or ReferenceId"));
         System.out.println(salaryPaidOrUnPaid.getSalaryPaidOrUnPaid());

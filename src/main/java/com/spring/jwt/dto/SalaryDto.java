@@ -8,7 +8,7 @@ import java.util.List;
 public class SalaryDto {
 
     private Integer employeeId;
-
+    private Integer AdvanceBalance;
     private Integer halfDaySalary;
     private Integer perDaySalary;
     private Integer totalSalary;
@@ -17,8 +17,9 @@ public class SalaryDto {
     private List<SalaryBreakdownDto> salaryBreakdownDto;
 
     public SalaryDto(Integer employeeId, Integer halfDaySalary, Integer perDaySalary, Integer totalSalary, Integer totalSalaryCalculate, List<SalaryBreakdownDto> salaryBreakdownDto,
-    Boolean salaryPaidOrUnPaid) {
+    Boolean salaryPaidOrUnPaid,Integer AdvanceBalance ) {
         this.employeeId = employeeId;
+        this.AdvanceBalance = AdvanceBalance;
         this.halfDaySalary = halfDaySalary;
         this.perDaySalary = perDaySalary;
         this.totalSalary = totalSalary;
